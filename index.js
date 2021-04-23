@@ -87,7 +87,7 @@ const roleSearch = () => {
 
 // Method to add Employee to DB
 const addEmployee = () => {
-    console.log(`Enter employee's first and last name:`);
+    console.log(`Enter new employee's first and last name:`);
     startApp();
 };
 
@@ -116,6 +116,9 @@ connection.connect((err) => {
     console.log(`connected as id ${connection.threadId}\n`);
     startApp();
 });
+
+
+
 
 
 
