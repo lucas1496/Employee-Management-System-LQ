@@ -12,6 +12,7 @@ const connection = mysql.createConnection({
 
 // Main application function - includes inquirer for user input and switch cases to run each query method
 const startApp = () => {
+    console.log(`Welcome to the Employee Management System! \n`)
     inquirer.prompt({
         name: 'action',
         type: 'list',
@@ -69,9 +70,9 @@ const startApp = () => {
 
 // Method to run Employee search query
 const employeeSearch = () => {
-    console.log(`Here are all the employees:`);
-    let query = 'SELECT first_name, last_name FROM employee';
+    let query = 'SELECT id, first_name, last_name FROM employee';
     connection.query(query, (err, res) => {
+        console.log(`\n \n Here are all the employees:`);
         console.table(res);
     });
     startApp();
@@ -79,9 +80,9 @@ const employeeSearch = () => {
 
 // Method to run Department search query
 const departmentSearch = () => {
-    console.log(`Here are all the departments:`);
-    let query = 'SELECT name FROM department';
+    let query = 'SELECT id, name FROM department';
     connection.query(query, (err, res) => {
+        console.log(`\n \n Here are all the departments:`);
         console.table(res);
     });
     startApp();
@@ -89,9 +90,9 @@ const departmentSearch = () => {
 
 // Method to run Role search query
 const roleSearch = () => {
-    console.log(`Here are all the roles:`);
-    let query = 'SELECT title FROM role';
+    let query = 'SELECT id, title FROM role';
     connection.query(query, (err, res) => {
+        console.log(`\n \n Here are all the roles:`);
         console.table(res);
     });
     startApp();
