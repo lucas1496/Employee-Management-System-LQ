@@ -70,18 +70,30 @@ const startApp = () => {
 // Method to run Employee search query
 const employeeSearch = () => {
     console.log(`Here are all the employees:`);
+    let query = 'SELECT first_name, last_name FROM employee';
+    connection.query(query, (err, res) => {
+        console.table(res);
+    });
     startApp();
 };
 
 // Method to run Department search query
 const departmentSearch = () => {
     console.log(`Here are all the departments:`);
+    let query = 'SELECT name FROM department';
+    connection.query(query, (err, res) => {
+        console.table(res);
+    });
     startApp();
 };
 
 // Method to run Role search query
 const roleSearch = () => {
     console.log(`Here are all the roles:`);
+    let query = 'SELECT title FROM role';
+    connection.query(query, (err, res) => {
+        console.table(res);
+    });
     startApp();
 };
 
