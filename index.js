@@ -73,7 +73,8 @@ const startApp = () => {
 const employeeSearch = () => {
     let query = 'SELECT id, first_name, last_name FROM employee';
     connection.query(query, (err, res) => {
-        console.log(`\n \n Here are all the employees:`);
+        if (err) throw err;
+        console.log(`\n \n Here are all the employees: \n`);
         console.table(res);
     });
     startApp();
@@ -83,7 +84,8 @@ const employeeSearch = () => {
 const departmentSearch = () => {
     let query = 'SELECT id, name FROM department';
     connection.query(query, (err, res) => {
-        console.log(`\n \n Here are all the departments:`);
+        if (err) throw err;
+        console.log(`\n \n Here are all the departments: \n`);
         console.table(res);
     });
     startApp();
@@ -93,7 +95,8 @@ const departmentSearch = () => {
 const roleSearch = () => {
     let query = 'SELECT id, title FROM role';
     connection.query(query, (err, res) => {
-        console.log(`\n \n Here are all the roles:`);
+        if (err) throw err;
+        console.log(`\n \n Here are all the roles: \n`);
         console.table(res);
     });
     startApp();
