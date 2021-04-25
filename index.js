@@ -104,8 +104,59 @@ const roleSearch = () => {
 
 // Method to add Employee to DB
 const addEmployee = () => {
-    console.log(`Enter new employee's first and last name:`);
-    startApp();
+    inquirer.prompt([{
+        name: "empFirst",
+        type: "input",
+        message: "What is the new employee's first name?",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            }
+            return "Please enter a first name";
+        }
+    },
+    {
+        name: "empLast",
+        type: "input",
+        message: "What is the new employee's last name?",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            }
+            return "Please enter a last name";
+        }
+    },
+    {
+        name: "empRoleID",
+        type: "input",
+        message: "What is the new employee's role id?",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            }
+            return "Please enter a role id";
+        }
+    },
+    {
+        name: "empManagerID",
+        type: "input",
+        message: "What is the new employee's manager id? (Leave empty if new employee is a manager)",
+
+    }]).then((answer) => {
+        connection.query('INSERT INTO employee SET ?',
+        {
+            first_name: answer.empFirst,
+            last_name: answer.empLast,
+            role_id: answer.empRoleID,
+            manager_id: answer.empManagerID,
+
+        },
+        (err, res) => {
+            if (err) throw err;
+            console.log(`\n ${res.affectedRows} employee added!\n`);
+            startApp();
+        });
+    });
 };
 
 // Method to add Department to DB
