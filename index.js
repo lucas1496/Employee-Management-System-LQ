@@ -11,10 +11,39 @@ const connection = mysql.createConnection({
     database: 'employeeDB',
 });
 
+// Banner method
+const initBanner = () => {
+    console.log(`Welcome to the Employee Management System! \n
+        ########:'##::::'##:'########::'##::::::::'#######::'##:::'##:'########:'########:           
+        ##.....:: ###::'###: ##.... ##: ##:::::::'##.... ##:. ##:'##:: ##.....:: ##.....::           
+        ##::::::: ####'####: ##:::: ##: ##::::::: ##:::: ##::. ####::: ##::::::: ##:::::::           
+        ######::: ## ### ##: ########:: ##::::::: ##:::: ##:::. ##:::: ######::: ######:::           
+        ##...:::: ##. #: ##: ##.....::: ##::::::: ##:::: ##:::: ##:::: ##...:::: ##...::::           
+        ##::::::: ##:.:: ##: ##:::::::: ##::::::: ##:::: ##:::: ##:::: ##::::::: ##:::::::           
+        ########: ##:::: ##: ##:::::::: ########:. #######::::: ##:::: ########: ########:           
+        .......::..:::::..::..:::::::::........:::.......::::::..:::::........::........::          
+##::::'##::::'###::::'##::: ##::::'###:::::'######:::'########:'##::::'##:'########:'##::: ##:'########:
+###::'###:::'## ##::: ###:: ##:::'## ##:::'##... ##:: ##.....:: ###::'###: ##.....:: ###:: ##:... ##..::
+####'####::'##:. ##:: ####: ##::'##:. ##:: ##:::..::: ##::::::: ####'####: ##::::::: ####: ##:::: ##::::
+## ### ##:'##:::. ##: ## ## ##:'##:::. ##: ##::'####: ######::: ## ### ##: ######::: ## ## ##:::: ##::::
+##. #: ##: #########: ##. ####: #########: ##::: ##:: ##...:::: ##. #: ##: ##...:::: ##. ####:::: ##::::
+##:.:: ##: ##.... ##: ##:. ###: ##.... ##: ##::: ##:: ##::::::: ##:.:: ##: ##::::::: ##:. ###:::: ##::::
+##:::: ##: ##:::: ##: ##::. ##: ##:::: ##:. ######::: ########: ##:::: ##: ########: ##::. ##:::: ##::::
+.:::::..::..:::::..::..::::..::..:::::..:::......::::........::..:::::..::........::..::::..:::::..:::::
+            :'######::'##:::'##::'######::'########:'########:'##::::'##:                        
+            '##... ##:. ##:'##::'##... ##:... ##..:: ##.....:: ###::'###:                        
+             ##:::..:::. ####::: ##:::..::::: ##:::: ##::::::: ####'####:                        
+            . ######::::. ##::::. ######::::: ##:::: ######::: ## ### ##:                        
+            :..... ##:::: ##:::::..... ##:::: ##:::: ##...:::: ##. #: ##:                         
+            '##::: ##:::: ##::::'##::: ##:::: ##:::: ##::::::: ##:.:: ##:                        
+            . ######::::: ##::::. ######::::: ##:::: ########: ##:::: ##:                        
+            :......::::::..::::::......::::::..:::::........::..:::::..::                          \n \n`)
+};
+
+
 // Main application function - includes inquirer for user input and switch cases to run each query method
 const startApp = () => {
-    console.log(`Welcome to the Employee Management System! \n`)
-    inquirer.prompt({
+    inquirer.prompt([{
         name: 'action',
         type: 'list',
         message: 'What would you like to do?',
@@ -28,7 +57,7 @@ const startApp = () => {
           'Update Employee Role',
           'Exit',
         ],
-    }).then((answer) => {
+    }]).then((answer) => {
         switch (answer.action) {
             case 'View All Employees':
                 employeeSearch();
@@ -71,7 +100,7 @@ const startApp = () => {
 
 // Method to run Employee search query
 const employeeSearch = () => {
-    let query = 'SELECT id, first_name, last_name FROM employee';
+    let query = 'SELECT id, first_name, last_name, role_id, manager_id FROM employee';
     connection.query(query, (err, res) => {
         if (err) throw err;
         console.log(`\n \n Here are all the employees: \n`);
@@ -93,7 +122,7 @@ const departmentSearch = () => {
 
 // Method to run Role search query
 const roleSearch = () => {
-    let query = 'SELECT id, title FROM role';
+    let query = 'SELECT id, title, salary, department_id FROM role';
     connection.query(query, (err, res) => {
         if (err) throw err;
         console.log(`\n \n Here are all the roles: \n`);
@@ -201,6 +230,7 @@ const updateRole = () => {
 connection.connect((err) => {
     if (err) throw err;
     console.log(`connected as id ${connection.threadId}\n`);
+    initBanner();
     startApp();
 });
 
