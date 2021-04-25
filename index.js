@@ -161,8 +161,27 @@ const addEmployee = () => {
 
 // Method to add Department to DB
 const addDepartment = () => {
-    console.log(`Enter new department's name:`);
-    startApp();
+    inquirer.prompt({
+        name: "department",
+        type: "input",
+        message: "Enter a name for the new department",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            }
+            return "Please enter department name";
+        }
+    }).then((answer) => {
+        connection.query('INSERT INTO department SET ?',
+        {
+            name: answer.department,
+        },
+        (err, res) => {
+            if (err) throw err;
+            console.log(`\n ${res.affectedRows} department added!\n`);
+            startApp();
+        });
+    });
 };
 
 // Method to add Role to DB
