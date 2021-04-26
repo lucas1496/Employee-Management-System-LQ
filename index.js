@@ -191,7 +191,7 @@ const addEmployee = () => {
 // Method to add Department to DB
 const addDepartment = () => {
     inquirer.prompt({
-        name: "department",
+        name: "addDepartment",
         type: "input",
         message: "Enter a name for the new department",
         validate: answer => {
@@ -199,11 +199,12 @@ const addDepartment = () => {
                 return true;
             }
             return "Please enter department name";
-        }
+        },
+
     }).then((answer) => {
         connection.query('INSERT INTO department SET ?',
         {
-            name: answer.department,
+            name: answer.addDepartment,
         },
         (err, res) => {
             if (err) throw err;
@@ -215,8 +216,54 @@ const addDepartment = () => {
 
 // Method to add Role to DB
 const addRole = () => {
-    console.log(`Enter new role:`);
-    startApp();
+    inquirer.prompt([{
+        name: "roleTitle",
+        type: "input",
+        message: "Enter a title for the new role",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            }
+            return "Please enter role title";
+        },
+
+    },
+    {
+        name: "roleSalary",
+        type: "input",
+        message: "Enter a salary for the new role",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            }
+            return "Please enter a salary";
+        },
+
+    },
+    {
+        name: "departmentID",
+        type: "input",
+        message: "What is the new role's department id?",
+        validate: answer => {
+            if (answer !== "") {
+                return true;
+            }
+            return "Please enter a department id";
+        },
+
+    }]).then((answer) => {
+        connection.query('INSERT INTO role SET ?',
+        {
+            title: answer.roleTitle,
+            salary: answer.roleSalary,
+            department_id: answer.departmentID,
+        },
+        (err, res) => {
+            if (err) throw err;
+            console.log(`\n ${res.affectedRows} role added!\n`);
+            startApp();
+        });
+    });
 };
 
 // Method to update Employee Role
