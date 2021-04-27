@@ -4,6 +4,9 @@
     
 - This is a command line application that manages an employee database using Node, Inquirer, and MySQL
 
+![Screen Shot 2021-04-26 at 10 27 32 PM](https://user-images.githubusercontent.com/60542798/116180532-acfacc00-a6de-11eb-8f2f-9adbf846a15a.png)
+
+
 ## Table of Contents
 - <a href="#inst">Installation<a>
 - <a href="#use">Usage<a>
