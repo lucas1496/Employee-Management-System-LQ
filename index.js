@@ -56,6 +56,8 @@ const startApp = () => {
           'Add Role',
           'Update Employee Role',
           'Remove Employee',
+          'Remove Department',
+          'Remove Role',
           'Exit',
         ],
     }]).then((answer) => {
@@ -90,6 +92,14 @@ const startApp = () => {
 
             case 'Remove Employee':
                 removeEmployee();
+                break;
+
+            case 'Remove Department':
+                removeDepartment();
+                break;
+
+            case 'Remove Role':
+                removeRole();
                 break;
     
             case 'Exit':
@@ -369,10 +379,97 @@ const removeEmployee = () => {
                   startApp();
                 }
             );
-          });
-      });
-  };
+        });
+    });
+};
 
+const removeDepartment = () => {
+    connection.query('SELECT * FROM department', (err, results) => {
+        if (err) throw err;
+        // once you have the items, prompt the user for which they'd like to bid on
+        inquirer
+          .prompt([
+            {
+              name: 'department',
+              type: 'rawlist',
+              choices() {
+                const choiceArray = [];
+                results.forEach(({ name }) => {
+                  choiceArray.push(name);
+                });
+                return choiceArray;
+              },
+              message: 'Choose a department to remove',
+            },
+          ])
+          .then((answer) => {
+            // get the information of the chosen item
+            let chosenDep;
+            results.forEach((department) => {
+              if (department.name === answer.department) {
+                chosenDep = department;
+              }
+            });
+            connection.query(
+                'DELETE FROM department WHERE ?',
+                [
+                  {
+                    id: chosenDep.id,
+                  },
+                ],
+                (error) => {
+                  if (error) throw err;
+                  console.log(`\n Department removed\n`);
+                  startApp();
+                }
+            );
+        });
+    });
+};
+
+const removeRole = () => {
+    connection.query('SELECT * FROM role', (err, results) => {
+        if (err) throw err;
+        // once you have the items, prompt the user for which they'd like to bid on
+        inquirer
+          .prompt([
+            {
+              name: 'role',
+              type: 'rawlist',
+              choices() {
+                const choiceArray = [];
+                results.forEach(({ title }) => {
+                  choiceArray.push(title);
+                });
+                return choiceArray;
+              },
+              message: 'Choose a role to remove',
+            },
+          ])
+          .then((answer) => {
+            // get the information of the chosen item
+            let chosenRole;
+            results.forEach((role) => {
+              if (role.title === answer.role) {
+                chosenRole = role;
+              }
+            });
+            connection.query(
+                'DELETE FROM role WHERE ?',
+                [
+                  {
+                    id: chosenRole.id,
+                  },
+                ],
+                (error) => {
+                  if (error) throw err;
+                  console.log(`\n Role removed\n`);
+                  startApp();
+                }
+            );
+        });
+    });
+};
 
 // Connect to DB
 connection.connect((err) => {
@@ -381,9 +478,3 @@ connection.connect((err) => {
     initBanner();
     startApp();
 });
-
-
-
-
-
-
