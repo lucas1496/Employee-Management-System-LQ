@@ -55,6 +55,7 @@ const startApp = () => {
           'Add Department',
           'Add Role',
           'Update Employee Role',
+          'Remove Employee',
           'Exit',
         ],
     }]).then((answer) => {
@@ -86,6 +87,10 @@ const startApp = () => {
             case 'Update Employee Role':
                 updateRole();
                 break;
+
+            case 'Remove Employee':
+                removeEmployee();
+                break;
     
             case 'Exit':
                 connection.end();
@@ -93,6 +98,7 @@ const startApp = () => {
     
             default:
                 console.log(`Invalid action: ${answer.action}`);
+                connection.end();
                 break;
         }
     });
@@ -321,6 +327,51 @@ const updateRole = () => {
           });
       });
 };
+
+
+const removeEmployee = () => {
+    connection.query('SELECT * FROM employee', (err, results) => {
+        if (err) throw err;
+        // once you have the items, prompt the user for which they'd like to bid on
+        inquirer
+          .prompt([
+            {
+              name: 'employee',
+              type: 'rawlist',
+              choices() {
+                const choiceArray = [];
+                results.forEach(({ last_name }) => {
+                  choiceArray.push(last_name);
+                });
+                return choiceArray;
+              },
+              message: 'Choose an employee to remove',
+            },
+          ])
+          .then((answer) => {
+            // get the information of the chosen item
+            let chosenEmployee;
+            results.forEach((employee) => {
+              if (employee.last_name === answer.employee) {
+                chosenEmployee = employee;
+              }
+            });
+            connection.query(
+                'DELETE FROM employee WHERE ?',
+                [
+                  {
+                    id: chosenEmployee.id,
+                  },
+                ],
+                (error) => {
+                  if (error) throw err;
+                  console.log(`\n Employee removed\n`);
+                  startApp();
+                }
+            );
+          });
+      });
+  };
 
 
 // Connect to DB
