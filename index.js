@@ -271,8 +271,55 @@ const addRole = () => {
 
 // Method to update Employee Role
 const updateRole = () => {
-    console.log(`Choose employee to update role:`);
-    startApp();
+    connection.query('SELECT * FROM employee', (err, results) => {
+        if (err) throw err;
+        // once you have the items, prompt the user for which they'd like to bid on
+        inquirer
+          .prompt([
+            {
+              name: 'employee',
+              type: 'rawlist',
+              choices() {
+                const choiceArray = [];
+                results.forEach(({ last_name }) => {
+                  choiceArray.push(last_name);
+                });
+                return choiceArray;
+              },
+              message: 'Choose an employee to update role',
+            },
+            {
+              name: 'newRole',
+              type: 'input',
+              message: 'Please input the new role id for the employee',
+            },
+          ])
+          .then((answer) => {
+            // get the information of the chosen item
+            let chosenEmployee;
+            results.forEach((employee) => {
+              if (employee.last_name === answer.employee) {
+                chosenEmployee = employee;
+              }
+            });
+            connection.query(
+                'UPDATE employee SET ? WHERE ?',
+                [
+                  {
+                    role_id: answer.newRole,
+                  },
+                  {
+                    id: chosenEmployee.id,
+                  },
+                ],
+                (error) => {
+                  if (error) throw err;
+                  console.log(`\n Employee's role updated successfully!\n`);
+                  startApp();
+                }
+            );
+          });
+      });
 };
 
 
